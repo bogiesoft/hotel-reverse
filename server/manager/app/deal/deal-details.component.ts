@@ -53,5 +53,6 @@ export class DealDetailsComponent implements OnInit {
         error => console.log(error),
         () => console.log("done")
       )
+    alert("거래가 성립되었습니다!")
   }
 }

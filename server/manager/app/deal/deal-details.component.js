@@ -53,6 +53,7 @@ System.register(['angular2/core', 'angular2/router', '../services/deals.service'
                     this.dealsService
                         .getContract(this.hotel_ID, this.booking_Num)
                         .subscribe(function (d) { return console.log(d); }, function (error) { return console.log(error); }, function () { return console.log("done"); });
+                    alert("거래가 성립되었습니다!");
                 };
                 __decorate([
                     core_1.Input(), 
