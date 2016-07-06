@@ -30,7 +30,7 @@ export default (express) => {
       client_PW: crypted,
       client_Name: req.body.client_Name,
       billingInfo: req.body.billingInfo,
-      member: 1
+      member: req.body.member,
     })
     .then((client) => {
       console.log('client signup: ', client.dataValues);

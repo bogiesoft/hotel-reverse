@@ -25,12 +25,12 @@ class HotelSignin extends Component {
       client_Email : "",
       password : "",
       error : "",
-      user : "",
+      name : "",
     }
     this._handlePress = this._handlePress.bind(this);
   }
 
-  movePAGE(){
+  movePage(){
     let naviArr = this.props.navigator.getCurrentRoutes();
     if(naviArr[naviArr.length-2].id==='bid') {
       this.props.navigator.push({id : 'bidInfo'});
@@ -46,7 +46,7 @@ class HotelSignin extends Component {
       await AsyncStorage.setItem('client_Email', user.email);
       await AsyncStorage.setItem('googlesignin', 'true');
       ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
-      this.movePAGE();
+      this.movePage();
     }
     catch(err) {
       console.log('WRONG SIGNIN', err);
@@ -64,7 +64,7 @@ class HotelSignin extends Component {
             method : 'post',
             data : {
               client_Email : email,
-              client_PW : password
+              client_PW : password,
             }
           });
           if(response.data.id_token) {
@@ -78,7 +78,7 @@ class HotelSignin extends Component {
         }
         var id_token = await AsyncStorage.getItem('id_token');
         if(id_token) {
-          this.movePAGE();
+          this.movePage();
         } else {
           ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
         }
@@ -87,7 +87,12 @@ class HotelSignin extends Component {
         this.props.navigator.push({
           id : where,
         })
-        break;
+      break;
+      case 'nonmembersignin' :
+        this.props.navigator.push({
+          id : where,
+        })
+      break;
     }
   }
 
@@ -123,7 +128,7 @@ class HotelSignin extends Component {
           <View style={styles.padding}>
             <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
               <Text style={styles.buttonText}>
-                Log In
+                로그인
               </Text>
             </TouchableHighlight>
           </View>
@@ -132,7 +137,15 @@ class HotelSignin extends Component {
             <TouchableHighlight
               style={styles.submitBtn}
               onPress = {()=>this._handlePress('register')}>
-              <Text style={styles.buttonText}>Register</Text>
+              <Text style={styles.buttonText}>회원가입</Text>
+            </TouchableHighlight>
+          </View>
+
+          <View style={styles.padding}>
+            <TouchableHighlight
+              style={styles.submitBtn}
+              onPress = {()=>this._handlePress('nonmembersignin')}>
+              <Text style={styles.buttonText}>비회원 로그인</Text>
             </TouchableHighlight>
           </View>
 

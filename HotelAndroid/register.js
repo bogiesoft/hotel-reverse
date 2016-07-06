@@ -76,7 +76,8 @@ class Register extends Component {
             client_Email : email,
             client_PW : password,
             client_Name : name,
-            billingInfo : '1234-1234-1234-1234'
+            billingInfo : '1234-1234-1234-1234',
+            member : 1,
           }
         });
         console.log('response : ', response);

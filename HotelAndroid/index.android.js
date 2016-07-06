@@ -15,6 +15,7 @@ import {
 import ToolbarAndroid from 'ToolbarAndroid';
 
 
+import NonmemberSignin from './nonmemberSignin';
 import SplashPage from './splash';
 import TutorialPage from './tutorial';
 import HotelSearch from './hotelSearch';
@@ -123,7 +124,9 @@ class HotelAndroid extends Component {
     case 'bid':
       return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
     case 'signin':
-      return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged} naviView={this.changeNaviView()}/>);
+      return (<HotelSignin navigator={navigator} naviView={this.changeNaviView()}/>);
+    case 'nonmembersignin':
+      return (<NonmemberSignin navigator={navigator} naviView={this.changeNaviView()}/>);
     case 'register':
       return (<Register navigator={navigator}/>);
     case 'bidInfo':
@@ -202,7 +205,11 @@ class HotelAndroid extends Component {
     }
   }
 
-  componentWillMount() {
+  async componentWillMount() {
+    let token = await AsyncStorage.getItem('id_token')
+    if(token === 'temp') {
+      AsyncStorage.removeItem('id_token');
+    }
     this._setupGoogleSignin();
     this.changeNaviView();
     this.addBackPressEventListener();

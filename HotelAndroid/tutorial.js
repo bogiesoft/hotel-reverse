@@ -132,6 +132,8 @@ const styles = StyleSheet.create({
   image: {
     flex : 1,
     resizeMode : 'cover',
+    width : null,
+    height : null,
   },
   viewPager: {
     flex: 1,
