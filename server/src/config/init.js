@@ -1,4 +1,6 @@
 var mysql = require('mysql');
+
+var crypto = require('crypto');
 /*--------------------------------------------------------------------
   1. Create a MySQL database connection and export it
   - host: localhost
@@ -9,9 +11,22 @@ var mysql = require('mysql');
   2. Then connect to 'hotel-reverse' database
  --------------------------------------------------------------------*/
 
+
+var secret = 'hotelreverse';
+var algorithm = 'aes-256-ctr';
+
+
+
+function encrypt(text) {
+  var cipher = crypto.createCipher(algorithm,secret);
+  var crypted = cipher.update(text,'utf8','hex');
+  crypted += cipher.final('hex');
+  return crypted;
+}
+
 var connection = mysql.createConnection({
-  host: 'hotelreverse.ciwn6bqswuat.us-west-2.rds.amazonaws.com',
-  user: 'hotelreverse',
+  host: 'hotel-reverse-db.cd1q4y4851fd.ap-northeast-2.rds.amazonaws.com',
+  user: 'hotel',
   password: 'hotelreverse',
   database: 'hotelreverse'
 });
@@ -317,7 +332,7 @@ var hotel = [
 
 for(var i = 0; i < client.length; i++) {
   var query1 = 'INSERT INTO Client SET client_Email=?, client_PW=?, client_Name=?, billingInfo=?, member=?';
-  var query2 = [client[i].client_Email, client[i].client_PW, client[i].client_Name, client[i].billingInfo, client[i].member];
+  var query2 = [client[i].client_Email, encrypt(client[i].client_PW), client[i].client_Name, client[i].billingInfo, client[i].member];
 
   connection.query(query1, query2, function(err, results, fields) {
     if (err) {
@@ -331,7 +346,7 @@ for(var i = 0; i < client.length; i++) {
 
 for (var i = 0; i < hotel.length; i++) {
   var query1 = 'INSERT INTO Hotel SET hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?';
-  var query2 = [hotel[i].hotel_ID, hotel[i].hotel_PW, hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name];
+  var query2 = [hotel[i].hotel_ID, encrypt(hotel[i].hotel_PW), hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name];
 
   connection.query(query1, query2, (err, results, fields) => {
     if (err) {
